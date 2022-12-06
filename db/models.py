@@ -20,11 +20,11 @@ class Node(Base):
     id = Column(Integer, primary_key=True, index=True)
     cluster_id = Column(Integer, ForeignKey('clusters.id'))
 
-    name = Column(String, unique=True, index=True),
-    status = Column(String, index=True),
-    internal_ip = Column(String, index=True),
-    allocatable = Column(JSON, index=True),
-    capacity = Column(JSON, index=True),
+    name = Column(String, unique=True, index=True)
+    status = Column(String, index=True)
+    internal_ip = Column(String, index=True)
+    allocatable = Column(JSON, index=True)
+    capacity = Column(JSON, index=True)
     labels = Column(JSON, index=True)
 
     cluster = relationship('Cluster', back_populates='nodes')
