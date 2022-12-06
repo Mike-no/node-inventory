@@ -75,6 +75,7 @@ def get_nodes(db: Session = Depends(get_db)):
 
 @app.get('/nodes/{cluster_id}', tags=['nodes'], status_code=200, response_model=List[schemas.Node],
          description='Get nodes details for the given K8s cluster')
-def get_nodes_by_cluster(db: Session = Depends(get_db)):
+def get_nodes_by_cluster(cluster_id: int, db: Session = Depends(get_db)):
+    print(cluster_id)
     print(db)
     return []
