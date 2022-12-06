@@ -1,0 +1,531 @@
+{
+    "openapi": "3.0.2",
+    "info": {
+        "title": "k8s-node-inventory",
+        "version": "0.1.0"
+    },
+    "paths": {
+        "/cluster/register": {
+            "post": {
+                "tags": [
+                    "cluster"
+                ],
+                "summary": "Register Cluster",
+                "description": "Register a new K8s cluster in order to be monitored",
+                "operationId": "register_cluster_cluster_register_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ClusterCreate"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Cluster"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/cluster/{cluster_id}": {
+            "get": {
+                "tags": [
+                    "cluster"
+                ],
+                "summary": "Get Cluster",
+                "description": "Get K8s cluster details",
+                "operationId": "get_cluster_cluster__cluster_id__get",
+                "parameters": [
+                    {
+                        "required": true,
+                        "schema": {
+                            "title": "Cluster Id",
+                            "type": "integer"
+                        },
+                        "name": "cluster_id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Cluster"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/clusters": {
+            "get": {
+                "tags": [
+                    "cluster"
+                ],
+                "summary": "Get Clusters",
+                "description": "Get K8s clusters details",
+                "operationId": "get_clusters_clusters_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "title": "Response Get Clusters Clusters Get",
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Cluster"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/cluster/unregister/{cluster_id}": {
+            "delete": {
+                "tags": [
+                    "cluster"
+                ],
+                "summary": "Unregister Cluster",
+                "description": "Unregister a monitored K8s cluster",
+                "operationId": "unregister_cluster_cluster_unregister__cluster_id__delete",
+                "parameters": [
+                    {
+                        "required": true,
+                        "schema": {
+                            "title": "Cluster Id",
+                            "type": "integer"
+                        },
+                        "name": "cluster_id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful Response"
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/nodes": {
+            "get": {
+                "tags": [
+                    "nodes"
+                ],
+                "summary": "Get Nodes",
+                "description": "Get nodes details for all K8s clusters",
+                "operationId": "get_nodes_nodes_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "title": "Response Get Nodes Nodes Get",
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Node"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/nodes/{cluster_id}": {
+            "get": {
+                "tags": [
+                    "nodes"
+                ],
+                "summary": "Get Nodes By Cluster",
+                "description": "Get nodes details for the given K8s cluster",
+                "operationId": "get_nodes_by_cluster_nodes__cluster_id__get",
+                "parameters": [
+                    {
+                        "required": true,
+                        "schema": {
+                            "title": "Cluster Id",
+                            "type": "integer"
+                        },
+                        "name": "cluster_id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "title": "Response Get Nodes By Cluster Nodes  Cluster Id  Get",
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Node"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Cluster": {
+                "title": "Cluster",
+                "required": [
+                    "name",
+                    "kubeconfig",
+                    "id"
+                ],
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "title": "Name",
+                        "type": "string"
+                    },
+                    "kubeconfig": {
+                        "$ref": "#/components/schemas/Kubeconfig"
+                    },
+                    "id": {
+                        "title": "Id",
+                        "type": "integer"
+                    },
+                    "nodes": {
+                        "title": "Nodes",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Node"
+                        },
+                        "default": []
+                    }
+                }
+            },
+            "ClusterCreate": {
+                "title": "ClusterCreate",
+                "required": [
+                    "name",
+                    "kubeconfig"
+                ],
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "title": "Name",
+                        "type": "string"
+                    },
+                    "kubeconfig": {
+                        "$ref": "#/components/schemas/Kubeconfig"
+                    }
+                }
+            },
+            "HTTPValidationError": {
+                "title": "HTTPValidationError",
+                "type": "object",
+                "properties": {
+                    "detail": {
+                        "title": "Detail",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ValidationError"
+                        }
+                    }
+                }
+            },
+            "K8sCluster": {
+                "title": "K8sCluster",
+                "required": [
+                    "name",
+                    "cluster"
+                ],
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "title": "Name",
+                        "type": "string"
+                    },
+                    "cluster": {
+                        "$ref": "#/components/schemas/K8sClusterCluster"
+                    }
+                }
+            },
+            "K8sClusterCluster": {
+                "title": "K8sClusterCluster",
+                "required": [
+                    "server",
+                    "certificate-authority-data"
+                ],
+                "type": "object",
+                "properties": {
+                    "server": {
+                        "title": "Server",
+                        "type": "string"
+                    },
+                    "certificate-authority-data": {
+                        "title": "Certificate-Authority-Data",
+                        "type": "string"
+                    }
+                }
+            },
+            "K8sContext": {
+                "title": "K8sContext",
+                "required": [
+                    "name",
+                    "context"
+                ],
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "title": "Name",
+                        "type": "string"
+                    },
+                    "context": {
+                        "$ref": "#/components/schemas/K8sContextContext"
+                    }
+                }
+            },
+            "K8sContextContext": {
+                "title": "K8sContextContext",
+                "required": [
+                    "cluster",
+                    "user"
+                ],
+                "type": "object",
+                "properties": {
+                    "cluster": {
+                        "title": "Cluster",
+                        "type": "string"
+                    },
+                    "user": {
+                        "title": "User",
+                        "type": "string"
+                    }
+                }
+            },
+            "K8sUser": {
+                "title": "K8sUser",
+                "required": [
+                    "name",
+                    "user"
+                ],
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "title": "Name",
+                        "type": "string"
+                    },
+                    "user": {
+                        "$ref": "#/components/schemas/K8sUserUser"
+                    }
+                }
+            },
+            "K8sUserUser": {
+                "title": "K8sUserUser",
+                "required": [
+                    "client-certificate-data",
+                    "client-key-data"
+                ],
+                "type": "object",
+                "properties": {
+                    "client-certificate-data": {
+                        "title": "Client-Certificate-Data",
+                        "type": "string"
+                    },
+                    "client-key-data": {
+                        "title": "Client-Key-Data",
+                        "type": "string"
+                    }
+                }
+            },
+            "Kubeconfig": {
+                "title": "Kubeconfig",
+                "required": [
+                    "apiVersion",
+                    "current-context",
+                    "kind",
+                    "preferences"
+                ],
+                "type": "object",
+                "properties": {
+                    "apiVersion": {
+                        "title": "Apiversion",
+                        "type": "string"
+                    },
+                    "clusters": {
+                        "title": "Clusters",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/K8sCluster"
+                        },
+                        "default": []
+                    },
+                    "contexts": {
+                        "title": "Contexts",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/K8sContext"
+                        },
+                        "default": []
+                    },
+                    "current-context": {
+                        "title": "Current-Context",
+                        "type": "string"
+                    },
+                    "kind": {
+                        "title": "Kind",
+                        "type": "string"
+                    },
+                    "preferences": {
+                        "title": "Preferences",
+                        "type": "object"
+                    },
+                    "users": {
+                        "title": "Users",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/K8sUser"
+                        },
+                        "default": []
+                    }
+                }
+            },
+            "Node": {
+                "title": "Node",
+                "required": [
+                    "id",
+                    "cluster_id",
+                    "name",
+                    "status",
+                    "internal_ip",
+                    "allocatable",
+                    "capacity",
+                    "labels"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "title": "Id",
+                        "type": "integer"
+                    },
+                    "cluster_id": {
+                        "title": "Cluster Id",
+                        "type": "integer"
+                    },
+                    "name": {
+                        "title": "Name",
+                        "type": "string"
+                    },
+                    "status": {
+                        "title": "Status",
+                        "type": "string"
+                    },
+                    "internal_ip": {
+                        "title": "Internal Ip",
+                        "type": "string"
+                    },
+                    "allocatable": {
+                        "title": "Allocatable",
+                        "type": "object"
+                    },
+                    "capacity": {
+                        "title": "Capacity",
+                        "type": "object"
+                    },
+                    "labels": {
+                        "title": "Labels",
+                        "type": "object"
+                    }
+                }
+            },
+            "ValidationError": {
+                "title": "ValidationError",
+                "required": [
+                    "loc",
+                    "msg",
+                    "type"
+                ],
+                "type": "object",
+                "properties": {
+                    "loc": {
+                        "title": "Location",
+                        "type": "array",
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "integer"
+                                }
+                            ]
+                        }
+                    },
+                    "msg": {
+                        "title": "Message",
+                        "type": "string"
+                    },
+                    "type": {
+                        "title": "Error Type",
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}
