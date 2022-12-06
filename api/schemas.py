@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import List
 
 
@@ -17,8 +17,49 @@ class Node(BaseModel):
         orm_mode = True
 
 
+class K8sClusterCluster(BaseModel):
+    server: str
+    certificateAuthorityData: str = Field(alias='certificate-authority-data')
+
+
+class K8sCluster(BaseModel):
+    name: str
+    cluster: K8sClusterCluster
+
+
+class K8sContextContext(BaseModel):
+    cluster: str
+    user: str
+
+
+class K8sContext(BaseModel):
+    name: str
+    context: K8sContextContext
+
+
+class K8sUserUser(BaseModel):
+    clientCertificateData: str = Field(alias='client-certificate-data')
+    clientKeyData: str = Field(alias='client-key-data')
+
+
+class K8sUser(BaseModel):
+    name: str
+    user: K8sUserUser
+
+
+class Kubeconfig(BaseModel):
+    apiVersion: str
+    clusters: List[K8sCluster] = []
+    contexts: List[K8sContext] = []
+    currentContext: str = Field(alias='current-context')
+    kind: str
+    preferences: dict
+    users: List[K8sUser] = []
+
+
 class ClusterBase(BaseModel):
     name: str
+    kubeconfig: Kubeconfig
 
 
 class ClusterCreate(ClusterBase):
@@ -28,7 +69,6 @@ class ClusterCreate(ClusterBase):
 class Cluster(ClusterBase):
     id: int
 
-    kubeconfig: dict
     nodes: List[Node] = []
 
     class Config:
