@@ -48,6 +48,9 @@ class K8sUser(BaseModel):
 
 
 class Kubeconfig(BaseModel):
+    def __init__(self, *args, **entries):
+        super().__init__(*args, **entries)
+        self.__dict__.update(entries)
     apiVersion: str
     clusters: List[K8sCluster] = []
     contexts: List[K8sContext] = []
