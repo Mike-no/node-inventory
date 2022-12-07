@@ -76,3 +76,7 @@ class Cluster(ClusterBase):
 
     class Config:
         orm_mode = True
+
+
+class ResponseMessage404(BaseModel):
+    detail: str
