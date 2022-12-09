@@ -11,14 +11,15 @@ class Cluster(Base):
     name = Column(String, unique=True, index=True)
     kubeconfig = Column(JSON, index=True)
 
-    nodes = relationship('Node', back_populates='cluster')
+    nodes = relationship('Node', back_populates='cluster',
+                         cascade='all, delete', passive_deletes=True)
 
 
 class Node(Base):
     __tablename__ = 'nodes'
 
     id = Column(Integer, primary_key=True, index=True)
-    cluster_id = Column(Integer, ForeignKey('clusters.id'))
+    cluster_id = Column(Integer, ForeignKey('clusters.id', ondelete='CASCADE'))
 
     name = Column(String, unique=True, index=True)
     status = Column(String, index=True)
