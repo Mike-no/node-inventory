@@ -48,8 +48,8 @@ class K8sUser(BaseModel):
 
 
 class Kubeconfig(BaseModel):
-    def __init__(self, *args, **entries):
-        super().__init__(*args, **entries)
+    def __init__(self, **entries):
+        super().__init__(**entries)
         self.__dict__.update(entries)
     apiVersion: str
     clusters: List[K8sCluster] = []
@@ -76,6 +76,10 @@ class Cluster(ClusterBase):
 
     class Config:
         orm_mode = True
+
+
+class ResponseMessage400(BaseModel):
+    detail: str
 
 
 class ResponseMessage404(BaseModel):
