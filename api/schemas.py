@@ -2,16 +2,22 @@ from pydantic import BaseModel, Field
 from typing import List
 
 
-class Node(BaseModel):
-    id: int
-    cluster_id: int
-
+class NodeBase(BaseModel):
     name: str
     status: str
     internal_ip: str
     allocatable: dict
     capacity: dict
     labels: dict
+
+
+class NodeCreate(NodeBase):
+    pass
+
+
+class Node(NodeBase):
+    id: int
+    cluster_id: int
 
     class Config:
         orm_mode = True
