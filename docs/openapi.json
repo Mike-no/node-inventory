@@ -34,6 +34,16 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseMessage400"
+                                }
+                            }
+                        }
+                    },
                     "422": {
                         "description": "Validation Error",
                         "content": {
@@ -52,9 +62,9 @@
                 "tags": [
                     "cluster"
                 ],
-                "summary": "Get Cluster",
-                "description": "Get K8s cluster details",
-                "operationId": "get_cluster_cluster__cluster_id__get",
+                "summary": "Get Cluster By Id",
+                "description": "Get K8s cluster details by ID",
+                "operationId": "get_cluster_by_id_cluster__cluster_id__get",
                 "parameters": [
                     {
                         "required": true,
@@ -73,6 +83,16 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Cluster"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseMessage404"
                                 }
                             }
                         }
@@ -139,6 +159,16 @@
                     "204": {
                         "description": "Successful Response"
                     },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseMessage404"
+                                }
+                            }
+                        }
+                    },
                     "422": {
                         "description": "Validation Error",
                         "content": {
@@ -152,40 +182,14 @@
                 }
             }
         },
-        "/nodes": {
+        "/cluster/{cluster_id}/nodes": {
             "get": {
                 "tags": [
-                    "nodes"
-                ],
-                "summary": "Get Nodes",
-                "description": "Get nodes details for all K8s clusters",
-                "operationId": "get_nodes_nodes_get",
-                "responses": {
-                    "200": {
-                        "description": "Successful Response",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "title": "Response Get Nodes Nodes Get",
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/Node"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/nodes/{cluster_id}": {
-            "get": {
-                "tags": [
-                    "nodes"
+                    "cluster"
                 ],
                 "summary": "Get Nodes By Cluster",
                 "description": "Get nodes details for the given K8s cluster",
-                "operationId": "get_nodes_by_cluster_nodes__cluster_id__get",
+                "operationId": "get_nodes_by_cluster_cluster__cluster_id__nodes_get",
                 "parameters": [
                     {
                         "required": true,
@@ -203,11 +207,21 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "title": "Response Get Nodes By Cluster Nodes  Cluster Id  Get",
+                                    "title": "Response 200 Get Nodes By Cluster Cluster  Cluster Id  Nodes Get",
                                     "type": "array",
                                     "items": {
                                         "$ref": "#/components/schemas/Node"
                                     }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseMessage404"
                                 }
                             }
                         }
@@ -448,27 +462,19 @@
             "Node": {
                 "title": "Node",
                 "required": [
-                    "id",
-                    "cluster_id",
-                    "name",
+                    "uid",
                     "status",
                     "internal_ip",
                     "allocatable",
                     "capacity",
-                    "labels"
+                    "labels",
+                    "id",
+                    "cluster_id"
                 ],
                 "type": "object",
                 "properties": {
-                    "id": {
-                        "title": "Id",
-                        "type": "integer"
-                    },
-                    "cluster_id": {
-                        "title": "Cluster Id",
-                        "type": "integer"
-                    },
-                    "name": {
-                        "title": "Name",
+                    "uid": {
+                        "title": "Uid",
                         "type": "string"
                     },
                     "status": {
@@ -490,6 +496,40 @@
                     "labels": {
                         "title": "Labels",
                         "type": "object"
+                    },
+                    "id": {
+                        "title": "Id",
+                        "type": "integer"
+                    },
+                    "cluster_id": {
+                        "title": "Cluster Id",
+                        "type": "integer"
+                    }
+                }
+            },
+            "ResponseMessage400": {
+                "title": "ResponseMessage400",
+                "required": [
+                    "detail"
+                ],
+                "type": "object",
+                "properties": {
+                    "detail": {
+                        "title": "Detail",
+                        "type": "string"
+                    }
+                }
+            },
+            "ResponseMessage404": {
+                "title": "ResponseMessage404",
+                "required": [
+                    "detail"
+                ],
+                "type": "object",
+                "properties": {
+                    "detail": {
+                        "title": "Detail",
+                        "type": "string"
                     }
                 }
             },
