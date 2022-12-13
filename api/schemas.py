@@ -3,7 +3,7 @@ from typing import List
 
 
 class NodeBase(BaseModel):
-    name: str
+    uid: str
     status: str
     internal_ip: str
     allocatable: dict

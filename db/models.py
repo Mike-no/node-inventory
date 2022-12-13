@@ -21,7 +21,7 @@ class Node(Base):
     id = Column(Integer, primary_key=True, index=True)
     cluster_id = Column(Integer, ForeignKey('clusters.id', ondelete='CASCADE'))
 
-    name = Column(String, unique=True, index=True)
+    uid = Column(String, unique=True, index=True)
     status = Column(String, index=True)
     internal_ip = Column(String, index=True)
     allocatable = Column(JSON, index=True)
