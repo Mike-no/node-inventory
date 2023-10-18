@@ -42,7 +42,7 @@ docker-compose -f deployment/docker-compose.yaml up -d
 ```
 
 ## Maintainers
-**Michael De Angelis** - *Develop and Design* - m.deangelis@nextworks.it </br>
+**Michael De Angelis** - *Develop and Design* - deangelismichael98@gmail.com </br>
 
 ## License
 This module is distributed under [Apache 2.0 License](LICENSE) terms.
